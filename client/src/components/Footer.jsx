@@ -24,6 +24,9 @@ const Footer = () => {
         <div className="flex items-center flex-col">
           <h3 className="text-lg font-semibold text-white mb-1">Quick Links</h3>
           <div className="flex flex-col space-y-2">
+          <a href="#home" className="hover:text-indigo-400 transition">
+            Home
+          </a>
           <a href="#about" className="hover:text-indigo-400 transition">
             About
           </a>
@@ -32,9 +35,6 @@ const Footer = () => {
           </a>
           <a href="#contact" className="hover:text-indigo-400 transition">
             Contact
-          </a>
-          <a href="/signup" className="hover:text-indigo-400 transition">
-            Get Started
           </a>
           </div>
         </div>

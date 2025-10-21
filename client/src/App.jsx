@@ -9,6 +9,7 @@ import Footer from './components/Footer'
 import SignIn from './pages/SignIn'
 import Contact from './components/Contact'
 import SignUp from './pages/SignUp';
+import Dashboard from './pages/Dashboard';
 
 
 function App() {
@@ -33,6 +34,7 @@ function App() {
 
         <Route path="/signin" element={<SignIn />} />
         <Route path='/signup' element={<SignUp />} />
+        <Route path='/dashboard' element={<Dashboard />} />
 
       </Routes>
     </Router>

@@ -1,50 +1,120 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Menu, X } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [activeSection, setActiveSection] = useState(false);
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  // Toggle mobile menu
   const toggleMenu = () => setIsOpen(!isOpen);
 
+  // Check token whenever location changes
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    setIsLoggedIn(!!token);
+  }, [location]);
+
+  // Logout
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    setIsLoggedIn(false);
+    navigate("/signin");
+  };
+
+  // Scroll-based active link highlighting
+  useEffect(() => {
+    const handleScroll = () => {
+      const sections = document.querySelectorAll("section");
+      let current = "home";
+
+      sections.forEach((section) => {
+        const sectionTop = section.offsetTop - 100; // offset for navbar height
+        if (window.scrollY >= sectionTop) {
+          current = section.getAttribute("id");
+        }
+      });
+
+      setActiveSection(current);
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
   return (
-    <nav className="bg-[#0F172A] text-white sticky w-full top-0 z-50 border-b border-indigo-900/40 shadow-[0_2px_20px_rgba(99,102,241,0.1)] transition-all duration-300">
+    <nav className="bg-[#0F172A] text-white sticky w-full top-0 z-50 border-b border-indigo-900/40 shadow-[0_2px_20px_rgba(99,102,241,0.1)] transition-all duration-300 px-5">
       <div className="max-w-7xl mx-auto py-4 flex justify-between items-center">
-        <a href="/#home" className="text-2xl font-extrabold tracking-wide bg-gradient-to-r from-indigo-400 via-purple-400 to-cyan-400 bg-clip-text text-transparent">
+        {/* Logo */}
+        <a
+          href="/#home"
+          className="text-2xl font-extrabold tracking-wide bg-gradient-to-r from-indigo-400 via-purple-400 to-cyan-400 bg-clip-text text-transparent"
+        >
           <span className="text-white">Mind</span>TaskY
         </a>
 
-        <ul className="hidden md:flex space-x-8 text-sm font-medium">
-          {["Home", "Features", "About", "Contact"].map((item) => (
-            <li key={item}>
-              <a
-                href={`/#${item.toLowerCase()}`}
-                className="relative group"
+        {/* Logged out view */}
+        {!isLoggedIn ? (
+          <>
+            {/* Desktop menu */}
+            <ul className="hidden md:flex space-x-8 text-sm font-medium">
+              {["Home", "Features", "About", "Contact"].map((item) => (
+                <li key={item}>
+                  <a
+                    href={`/#${item.toLowerCase()}`}
+                    className={`relative group ${
+                      activeSection === item.toLowerCase()
+                        ? "text-indigo-400"
+                        : "text-white"
+                    } transition`}
+                  >
+                    <span className="group-hover:text-indigo-400 transition">
+                      {item}
+                    </span>
+                    <span
+                      className={`absolute left-0 bottom-0 h-[2px] bg-gradient-to-r from-indigo-400 to-purple-500 transition-all duration-300 ${
+                        activeSection === item.toLowerCase()
+                          ? "w-full"
+                          : "w-0 group-hover:w-full"
+                      }`}
+                    ></span>
+                  </a>
+                </li>
+              ))}
+            </ul>
+
+            {/* Auth buttons */}
+            <div className="hidden md:flex items-center space-x-4">
+              <Link
+                to="/signin"
+                className="px-5 py-2 text-sm font-semibold text-white hover:text-indigo-400 transition border-2 border-indigo-400 rounded-full"
               >
-                <span className="text-white group-hover:text-indigo-400 transition">
-                  {item}
-                </span>
-                <span className="absolute left-0 bottom-0 w-0 h-[2px] bg-gradient-to-r from-indigo-400 to-purple-500 transition-all group-hover:w-full"></span>
-              </a>
-            </li>
-          ))}
-        </ul>
+                Sign In
+              </Link>
+              <Link
+                to="/signup"
+                className="bg-gradient-to-r from-indigo-500 to-purple-500 hover:opacity-90 px-5 py-2 rounded-full text-sm font-semibold shadow-md transition-all duration-300"
+              >
+                Sign Up
+              </Link>
+            </div>
+          </>
+        ) : (
+          // Logged in view (logout only)
+          <div className="flex items-center space-x-4">
+            <button
+              onClick={handleLogout}
+              className="bg-red-600 hover:bg-red-700 px-6 py-2 rounded-full text-sm font-semibold shadow-md transition-all duration-300"
+            >
+              Logout
+            </button>
+          </div>
+        )}
 
-        {/* CTA Buttons */}
-        <div className="hidden md:flex items-center space-x-4">
-          <Link
-            to="/signin"
-            className="text-sm font-medium border border-indigo-500/70 text-indigo-300 hover:text-white px-4 py-2 rounded-full hover:bg-indigo-600/30 transition-all duration-300"
-          >
-            Sign In
-          </Link>
-          <Link
-            to="/signup"
-            className="bg-gradient-to-r from-indigo-500 to-purple-500 hover:opacity-90 px-4 py-2 rounded-full text-sm font-semibold shadow-[0_0_10px_rgba(99,102,241,0.5)] transition-all duration-300"
-          >
-            Sign Up
-          </Link>
-        </div>
-
+        {/* Mobile toggle button */}
         <div className="md:hidden flex items-center">
           <button onClick={toggleMenu} className="focus:outline-none">
             {isOpen ? <X size={28} /> : <Menu size={28} />}
@@ -52,32 +122,54 @@ const Navbar = () => {
         </div>
       </div>
 
-      {isOpen && (
+      {/* Mobile menu */}
+      {isOpen && !isLoggedIn && (
         <div className="md:hidden fixed w-full bg-[#1E1B4B]/90 backdrop-blur-xl border-t border-indigo-900/40 px-6 pb-6 space-y-4 text-center">
           {["Home", "Features", "About", "Contact"].map((item) => (
             <a
               key={item}
-              href={`#${item.toLowerCase()}`}
-              className="block text-gray-300 hover:text-indigo-400 transition mt-2"
+              href={`/#${item.toLowerCase()}`}
+              className={`block py-2 font-medium ${
+                activeSection === item.toLowerCase()
+                  ? "text-indigo-400"
+                  : "text-white"
+              }`}
+              onClick={() => setIsOpen(false)}
             >
               {item}
             </a>
           ))}
-
-          <div className="pt-4 space-y-3">
-            <a
-              href="/signin"
-              className="block text-center border border-indigo-500/70 text-indigo-300 py-2 rounded-full font-semibold hover:bg-indigo-600/30 hover:text-white transition-all duration-300"
+          <div className="flex justify-center space-x-4">
+            <Link
+              to="/signin"
+              className="text-white hover:text-indigo-400 border-2 border-indigo-400"
+              onClick={() => setIsOpen(false)}
             >
               Sign In
-            </a>
-            <a
-              href="/signup"
-              className="block text-center bg-gradient-to-r from-indigo-500 to-purple-500 hover:opacity-90 py-2 rounded-full font-semibold shadow-[0_0_10px_rgba(99,102,241,0.4)] transition-all duration-300"
+            </Link>
+            <Link
+              to="/signup"
+              className="bg-gradient-to-r from-indigo-500 to-purple-500 hover:opacity-90 px-4 py-2 rounded-full text-sm font-semibold"
+              onClick={() => setIsOpen(false)}
             >
               Sign Up
-            </a>
+            </Link>
           </div>
+        </div>
+      )}
+
+      {/* Mobile logout */}
+      {isOpen && isLoggedIn && (
+        <div className="md:hidden fixed w-full bg-[#1E1B4B]/90 backdrop-blur-xl border-t border-indigo-900/40 px-6 pb-6 text-center">
+          <button
+            onClick={() => {
+              setIsOpen(false);
+              handleLogout();
+            }}
+            className="w-full bg-red-600 hover:bg-red-700 py-2 rounded-full font-semibold shadow-md transition-all duration-300"
+          >
+            Logout
+          </button>
         </div>
       )}
     </nav>

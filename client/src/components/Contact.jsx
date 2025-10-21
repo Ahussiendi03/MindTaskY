@@ -1,4 +1,5 @@
 import React from "react";
+import { motion } from "framer-motion";
 
 const Contact = () => {
   return (
@@ -11,7 +12,11 @@ const Contact = () => {
       <div className="absolute bottom-0 right-0 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl animate-pulse"></div>
 
       {/* Content */}
-      <div className="relative z-10 max-w-5xl mx-auto text-center">
+      <motion.div
+      initial= {{ opacity: 0, y: 40 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.8, ease: "easeOut" }} 
+      className="relative z-10 max-w-5xl mx-auto text-center">
         <h2 className="text-4xl md:text-5xl font-extrabold mb-6 bg-gradient-to-r from-indigo-400 via-purple-400 to-cyan-400 bg-clip-text text-transparent">
           Get in Touch
         </h2>
@@ -66,7 +71,7 @@ const Contact = () => {
             Send Message
           </button>
         </form>
-      </div>
+      </motion.div>
     </section>
   );
 };

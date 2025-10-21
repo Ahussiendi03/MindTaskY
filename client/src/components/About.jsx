@@ -1,5 +1,6 @@
 import React from "react";
 import ToDo from "../images/to-do-list.jpg";
+import { motion } from "framer-motion";
 
 const About = () => {
   return (
@@ -14,7 +15,11 @@ const About = () => {
 
       <div className="relative z-10 max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
 
-        <div className="flex justify-center md:justify-end">
+        <motion.div
+        initial={{ opacity: 0, x: -50 }}
+        whileInView={{ opacity: 1, x: 0 }}
+        transition={{ duration: 0.8, ease: "easeOut" }}
+        className="flex justify-center md:justify-end">
           <div className="bg-[#1E293B]/60 border border-indigo-900/30 backdrop-blur-lg rounded-3xl shadow-[0_0_25px_rgba(99,102,241,0.2)] p-6 hover:shadow-[0_0_35px_rgba(99,102,241,0.4)] hover:scale-105 transition-transform duration-500">
             <img
               src={ToDo}
@@ -22,10 +27,15 @@ const About = () => {
               className="w-72 md:w-96 rounded-2xl drop-shadow-[0_0_15px_rgba(99,102,241,0.2)]"
             />
           </div>
-        </div>
+        </motion.div>
 
         {/* Text Section */}
         <div className="flex flex-col justify-center text-center md:text-left">
+          <motion.div
+          initial={{ opacity: 0, x: 50 }}
+          whileInView={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.6, ease: "easeOut" }}
+          >
           <h2 className="text-4xl md:text-5xl font-extrabold mb-6 leading-tight bg-gradient-to-r from-indigo-400 via-purple-400 to-cyan-400 bg-clip-text text-transparent">
             About MindTasky
           </h2>
@@ -40,8 +50,14 @@ const About = () => {
             Built for creators, students, and professionals alike, MindTasky blends functionality
             with focus. It turns your goals into manageable actions and helps you stay aligned with your purpose.
           </p>
+          </motion.div>
+          
 
-          <div className="flex flex-col sm:flex-row gap-4 justify-center md:justify-start">
+          <motion.div
+          initial={{ opacity: 0, y: 40 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.2 , type: "spring", stiffness: 300}}
+          className="flex flex-col sm:flex-row gap-4 justify-center md:justify-start">
             <a
               href="/signup"
               className="bg-gradient-to-r from-indigo-500 to-purple-500 hover:opacity-90 px-8 py-3 rounded-full font-semibold text-white shadow-[0_0_15px_rgba(99,102,241,0.5)] transition-all duration-300"
@@ -54,7 +70,7 @@ const About = () => {
             >
               Explore Features
             </a>
-          </div>
+          </motion.div>
         </div>
       </div>
     </section>
