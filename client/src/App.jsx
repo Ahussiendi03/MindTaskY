@@ -10,6 +10,9 @@ import SignIn from './pages/SignIn'
 import Contact from './components/Contact'
 import SignUp from './pages/SignUp';
 import Dashboard from './pages/Dashboard';
+import Profile from './pages/Profile';
+import TaskManagement from './pages/TaskManagement';
+import Progress from './pages/Progress';
 
 
 function App() {
@@ -34,7 +37,11 @@ function App() {
 
         <Route path="/signin" element={<SignIn />} />
         <Route path='/signup' element={<SignUp />} />
+
         <Route path='/dashboard' element={<Dashboard />} />
+        <Route path='/profile' element={<Profile />} />
+        <Route path='/task-management' element={<TaskManagement />} />
+        <Route path='/progress' element={<Progress  />} />
 
       </Routes>
     </Router>

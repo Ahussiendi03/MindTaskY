@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Menu, X } from "lucide-react";
+import { Menu, X, LogOutIcon } from "lucide-react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 
 const Navbar = () => {
@@ -104,12 +104,12 @@ const Navbar = () => {
           </>
         ) : (
           // Logged in view (logout only)
-          <div className="flex items-center space-x-4">
+          <div className="items-center space-x-4">
             <button
               onClick={handleLogout}
-              className="bg-red-600 hover:bg-red-700 px-6 py-2 rounded-full text-sm font-semibold shadow-md transition-all duration-300"
+              className="border-2 border-red-500 hover:bg-red-700 px-6 py-2 rounded-full text-sm font-semibold shadow-md transition-all duration-300"
             >
-              Logout
+              <LogOutIcon size={16} className="inline mb-[3px]"></LogOutIcon> Logout
             </button>
           </div>
         )}
