@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { Menu, X, LogOutIcon } from "lucide-react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
+import LogoutModal from "./LogoutModal";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [activeSection, setActiveSection] = useState(false);
+  const [showLogoutModal, setShowLogoutModal] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -22,6 +24,7 @@ const Navbar = () => {
   const handleLogout = () => {
     localStorage.removeItem("token");
     setIsLoggedIn(false);
+    setShowLogoutModal(false);
     navigate("/signin");
   };
 
@@ -46,14 +49,15 @@ const Navbar = () => {
   }, []);
 
   return (
-    <nav className="bg-[#0F172A] text-white sticky w-full top-0 z-50 border-b border-indigo-900/40 shadow-[0_2px_20px_rgba(99,102,241,0.1)] transition-all duration-300 px-5">
+    <nav className="bg-[#0F172A] text-white sticky w-full top-0 z-50 border-b border-indigo-900/40 
+    shadow-[0_2px_20px_rgba(99,102,241,0.1)] transition-all duration-300 px-5">
       <div className="max-w-7xl mx-auto py-4 flex justify-between items-center">
         {/* Logo */}
         <a
           href="/#home"
           className="text-2xl font-extrabold tracking-wide bg-gradient-to-r from-indigo-400 via-purple-400 to-cyan-400 bg-clip-text text-transparent"
         >
-          <span className="text-white">Mind</span>TaskY
+          <span className="text-white">Prion</span>Task
         </a>
 
         {/* Logged out view */}
@@ -106,13 +110,20 @@ const Navbar = () => {
           // Logged in view (logout only)
           <div className="items-center space-x-4">
             <button
-              onClick={handleLogout}
+              onClick={() => setShowLogoutModal(true)}
               className="border-2 border-red-500 hover:bg-red-700 px-6 py-2 rounded-full text-sm font-semibold shadow-md transition-all duration-300"
             >
-              <LogOutIcon size={16} className="inline mb-[3px]"></LogOutIcon> Logout
+              <LogOutIcon size={16} className="inline mb-[3px]"></LogOutIcon>{" "}
+              Logout
             </button>
           </div>
         )}
+
+        <LogoutModal
+          isOpen={showLogoutModal}
+          onClose={() => setShowLogoutModal(false)}
+          onLogout={handleLogout}
+        />
 
         {/* Mobile toggle button */}
         <div className="md:hidden flex items-center">

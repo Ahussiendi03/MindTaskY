@@ -30,9 +30,6 @@ const Feature = () => {
     },
   ];
 
-
-
-
   return (
     <section
       id="features"
@@ -44,17 +41,19 @@ const Feature = () => {
 
       {/* Header */}
       <motion.h2
-      initial= {{ opacity: 0, y: 40 }}
-      whileInView={{ opacity: 1, y: 0 }} 
-      transition={{ duration: 0.8, ease: "easeOut" }}
-      className="text-4xl md:text-5xl font-extrabold mb-6 text-center bg-gradient-to-r from-indigo-400 via-purple-400 to-cyan-400 text-transparent bg-clip-text">
+        initial={{ opacity: 0, y: 40 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8, ease: "easeOut" }}
+        className="text-4xl md:text-5xl font-extrabold mb-6 text-center bg-gradient-to-r from-indigo-400 via-purple-400 to-cyan-400 text-transparent bg-clip-text"
+      >
         Key Features
       </motion.h2>
       <motion.p
-      initial= {{ opacity: 0, y: 40 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.8, ease: "easeOut", delay: 0.2 }} 
-      className="text-gray-400 text-center max-w-2xl mb-16">
+        initial={{ opacity: 0, y: 40 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8, ease: "easeOut", delay: 0.2 }}
+        className="text-gray-400 text-center max-w-2xl mb-16"
+      >
         Everything you need to stay focused, productive, and organized — all in
         one app built to empower your daily workflow.
       </motion.p>
@@ -63,7 +62,7 @@ const Feature = () => {
       <div className="relative z-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10 max-w-6xl">
         {features.map((feature, index) => (
           <motion.div
-            initial={{ capacity:0 , y: 50 }}
+            initial={{ capacity: 0, y: 50 }}
             whileInView={{ capacity: 1, y: 0 }}
             transition={{ duration: 0, delay: index * 0.2 }}
             key={index}

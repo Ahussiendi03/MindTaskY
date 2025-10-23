@@ -12,7 +12,6 @@ const TaskManagement = () => {
     priority: "Medium",
   });
 
-
   // Toggle modal visibility
   const toggleModal = () => setIsModalOpen(!isModalOpen);
 
@@ -22,21 +21,55 @@ const TaskManagement = () => {
     setNewTask((prev) => ({ ...prev, [name]: value }));
   };
 
-useEffect(() => { 
-    const getTasks = async () => { 
-        try {
-            const res = await axios.get("http://localhost:5000/api/tasks/get-tasks", {
-                withCredentials: true
-            });
-            setTasks(res.data);
-        } catch (error) {
-            console.error("Error fetching tasks:", error);
-        }
-        
-      };
-      getTasks();
-});
-  // Add new task
+  useEffect(() => {
+    const getTasks = async () => {
+      try {
+        const res = await axios.get(
+          "http://localhost:5000/api/tasks/get-tasks",
+          {
+            withCredentials: true,
+          }
+        );
+        setTasks(res.data);
+      } catch (error) {
+        console.error("Error fetching tasks:", error);
+      }
+    };
+    getTasks();
+  });
+
+  const handleComplete = async (id) => {
+    try {
+      const res = await axios.patch(
+        `http://localhost:5000/api/tasks/${id}/complete`,
+        {}, // no body needed
+        { withCredentials: true }
+      );
+
+      // Update the task list locally
+      setTasks(
+        tasks.map((task) =>
+          task._id === id ? { ...task, completed: true } : task
+        )
+      );
+    } catch (error) {
+      console.error("Error marking task as completed:", error);
+    }
+  };
+
+  const handleDelete = async (id) => {
+    try {
+      await axios.delete(`http://localhost:5000/api/tasks/${id}/delete`, {
+        withCredentials: true,
+      });
+
+      // Remove the task from state
+      setTasks(tasks.filter((task) => task._id !== id));
+    } catch (error) {
+      console.error("Error deleting task:", error);
+    }
+  };
+
   const handleAddTask = async (e) => {
     e.preventDefault();
 
@@ -52,11 +85,11 @@ useEffect(() => {
     };
 
     try {
-        const res = await axios.post(
+      const res = await axios.post(
         "http://localhost:5000/api/tasks/add-tasks",
         taskData,
         {
-            withCredentials: true
+          withCredentials: true,
         }
       );
       setTasks([...tasks, res.data]);
@@ -67,20 +100,6 @@ useEffect(() => {
     }
   };
 
-  // Toggle completed task
-  const toggleTask = (id) => {
-    setTasks(
-      tasks.map((task) =>
-        task.id === id ? { ...task, completed: !task.completed } : task
-      )
-    );
-  };
-
-  // Delete a task
-  const deleteTask = (id) => {
-    setTasks(tasks.filter((task) => task.id !== id));
-  };
-
   const priorityColors = {
     Low: "bg-green-600/30 text-green-300 border-green-500/40",
     Medium: "bg-yellow-600/30 text-yellow-300 border-yellow-500/40",
@@ -88,7 +107,7 @@ useEffect(() => {
   };
 
   return (
-    <div className="flex min-h-screen bg-[#0F172A] text-white">
+    <div className="flex min-h-screen bg-[#0F172A]/95 text-white">
       <Sidebar />
 
       <div className="flex-1 p-10 relative">
@@ -110,33 +129,47 @@ useEffect(() => {
             tasks.map((task) => (
               <div
                 key={task._id}
-                className={`bg-slate-800 p-4 rounded-lg border border-indigo-900/40 transition-all duration-300 ${
+                className={`bg-slate-900 p-4 rounded-lg border-2 border-indigo-600/60 
+                shadow-[0_2px_20px_rgba(99,102,241,0.1)] transition-all duration-300 hover:scale-105 ${
                   task.completed ? "opacity-70 line-through" : ""
                 }`}
               >
                 <div className="flex justify-between items-start">
                   <div>
-                    <h3 className="font-semibold text-lg">{task.title}</h3>
-                    <p className="text-gray-400 text-sm mb-2">{task.description}</p>
-                    <span
-                      className={`text-xs px-2 py-1 rounded-md border ${priorityColors[task.priority]}`}
-                    >
-                      {task.priority} Priority
-                    </span>
-                    <p className="text-xs text-gray-500 mt-1">
-                      Created: {task.createdAt}
+                    <div className="flex space-x-28 mb-2 ">
+                      <h3 className="font-semibold text-lg">{task.title}</h3>
+                      <span
+                        className={`text-xs px-2 py-1 rounded-md border ${
+                          priorityColors[task.priority]
+                        }`}
+                      >
+                        {task.priority} Priority
+                      </span>
+                      <p className="text-xs text-gray-400 mt-1">
+                        Created: {task.createdAt}
+                      </p>
+                    </div>
+
+                    <p className="text-gray-400 text-sm mb-2">
+                      {task.description}
                     </p>
                   </div>
 
                   <div className="flex gap-2">
                     <button
-                      onClick={() => toggleTask(task.id)}
-                      className="bg-green-600 hover:bg-green-700 px-3 py-1 rounded-md text-sm"
+                      onClick={() => handleComplete(task._id)}
+                      className={`px-3 py-1 rounded-md text-sm transition-all duration-300 ${
+                        task.completed
+                          ? "bg-gray-600 cursor-not-allowed opacity-60"
+                          : "bg-green-600 hover:bg-green-700"
+                      }`}
+                      disabled={task.completed}
                     >
-                      {task.completed ? "Undo" : "Done"}
+                      {task.completed ? "Completed" : "Done"}
                     </button>
+
                     <button
-                      onClick={() => deleteTask(task.id)}
+                      onClick={() => handleDelete(task._id)}
                       className="bg-red-600 hover:bg-red-700 px-3 py-1 rounded-md text-sm"
                     >
                       Delete

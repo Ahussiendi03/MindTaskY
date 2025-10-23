@@ -12,11 +12,11 @@ const Footer = () => {
         {/* Brand Section */}
         <div>
           <h2 className="text-2xl font-bold text-white mb-3">
-            Mind<span className="text-indigo-400">Tasky</span>
+            Prion<span className="text-indigo-400">Task</span>
           </h2>
           <p className="text-gray-400 text-sm leading-relaxed">
-            MindTasky helps you stay organized, focused, and motivated.
-            Your personal space for mindful productivity.
+            PrionTask helps you stay organized, focused, and motivated. Your
+            personal space for mindful productivity.
           </p>
         </div>
 
@@ -24,18 +24,18 @@ const Footer = () => {
         <div className="flex items-center flex-col">
           <h3 className="text-lg font-semibold text-white mb-1">Quick Links</h3>
           <div className="flex flex-col space-y-2">
-          <a href="#home" className="hover:text-indigo-400 transition">
-            Home
-          </a>
-          <a href="#about" className="hover:text-indigo-400 transition">
-            About
-          </a>
-          <a href="#features" className="hover:text-indigo-400 transition">
-            Features
-          </a>
-          <a href="#contact" className="hover:text-indigo-400 transition">
-            Contact
-          </a>
+            <a href="#home" className="hover:text-indigo-400 transition">
+              Home
+            </a>
+            <a href="#about" className="hover:text-indigo-400 transition">
+              About
+            </a>
+            <a href="#features" className="hover:text-indigo-400 transition">
+              Features
+            </a>
+            <a href="#contact" className="hover:text-indigo-400 transition">
+              Contact
+            </a>
           </div>
         </div>
 
@@ -81,7 +81,7 @@ const Footer = () => {
 
       {/* Copyright */}
       <div className="relative z-10 border-t border-indigo-900/40 mt-12 pt-6 text-center text-sm text-gray-500">
-        © {new Date().getFullYear()} MindTasky. All rights reserved.
+        © {new Date().getFullYear()} PrionTask. All rights reserved.
       </div>
     </footer>
   );

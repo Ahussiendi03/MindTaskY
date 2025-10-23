@@ -1,10 +1,10 @@
 import React from "react";
 import { CheckCircle2, Link, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
-import { useNavigate  } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const SuccessModal = ({ isOpen, onClose, message }) => {
-    const navigate = useNavigate();
+  const navigate = useNavigate();
   return (
     <AnimatePresence>
       {isOpen && (

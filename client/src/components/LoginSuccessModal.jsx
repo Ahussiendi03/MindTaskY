@@ -1,10 +1,10 @@
 import React from "react";
-import { CheckCircle2, X } from "lucide-react";
+import { CheckCircle2 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 
 const LoginSuccessModal = ({ isOpen, onClose, userName }) => {
-    const navigate = useNavigate();
+  const navigate = useNavigate();
   return (
     <AnimatePresence>
       {isOpen && (
@@ -16,19 +16,14 @@ const LoginSuccessModal = ({ isOpen, onClose, userName }) => {
         >
           {/* Modal Container */}
           <motion.div
-            className="bg-gradient-to-br from-indigo-900 via-indigo-800 to-indigo-950 text-white p-8 rounded-3xl shadow-2xl max-w-md w-full relative border border-indigo-700/30"
+            className="bg-gradient-to-br from-indigo-950
+            via-indigo-900 to-indigo-950 text-white p-8 rounded-3xl 
+            shadow-2xl max-w-md w-full relative border border-indigo-600"
             initial={{ scale: 0.8, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             exit={{ scale: 0.8, opacity: 0 }}
             transition={{ type: "spring", stiffness: 120, damping: 15 }}
           >
-            {/* Close Button */}
-            <button
-              onClick={onClose}
-              className="absolute top-3 right-3 text-gray-400 hover:text-white transition"
-            >
-              <X size={20} />
-            </button>
 
             {/* Success Icon */}
             <div className="flex flex-col items-center text-center">
@@ -43,15 +38,6 @@ const LoginSuccessModal = ({ isOpen, onClose, userName }) => {
                   : "You have successfully logged in to your account."}
               </p>
 
-              <button
-                onClick={() => {
-                  onClose();
-                  navigate("/dashboard");
-                }}
-                className="bg-green-500 hover:bg-green-600 text-white font-semibold px-6 py-2 rounded-xl shadow-md transition"
-              >
-                Continue to Dashboard
-              </button>
             </div>
           </motion.div>
         </motion.div>

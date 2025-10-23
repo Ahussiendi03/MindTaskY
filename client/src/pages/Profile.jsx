@@ -1,14 +1,14 @@
-import React from 'react'
-import Sidebar from '../components/Sidebar'
+import React from "react";
+import Sidebar from "../components/Sidebar";
 
 const Profile = () => {
   return (
     <div>
-        <div>
+      <div>
         <Sidebar />
-        </div>
+      </div>
     </div>
-  )
-}
+  );
+};
 
-export default Profile
+export default Profile;

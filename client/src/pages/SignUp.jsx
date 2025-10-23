@@ -3,11 +3,13 @@ import { UserPlus, ArrowRight, ArrowLeft, CheckCircle2 } from "lucide-react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import SuccessModal from "../components/SuccessModal.";
+import ErrorModal from "../components/ErrorModal";
 
 const SignUp = () => {
   const [step, setStep] = useState(1);
   const navigate = useNavigate();
   const [SuccessModalOpen, setSuccessModalOpen] = useState(false);
+  const [ShowErrorModal, setErrorModal] = useState({ open: false, message: "" });
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
@@ -15,7 +17,6 @@ const SignUp = () => {
   const [confirmPassword, setConfirmPassword] = useState("");
 
   const [profilePicture, setProfilePicture] = useState(null);
-
 
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
@@ -43,21 +44,25 @@ const SignUp = () => {
 
     try {
       // 🔗 Make request to backend
-      const res = await axios.post("http://localhost:5000/api/auth/signup", formData, {
-        headers: { "Content-Type": "multipart/form-data" },
-        withCredentials: true,
-      });
-
+      const res = await axios.post(
+        "http://localhost:5000/api/auth/signup",
+        formData,
+        {
+          headers: { "Content-Type": "multipart/form-data" },
+          withCredentials: true,
+        }
+      );
       setSuccessModalOpen(true);
       console.log("User registered:", res.data);
 
-    //   setTimeout(() => {
-    //     navigate("/signin");
-    //   }, 3000);
-
+        setTimeout(() => {
+          navigate("/signin");
+        }, 1500);
     } catch (err) {
-      setError(err.response?.data?.message || "Server error");
-      console.error(err);
+     
+      const errorMessage = err.response?.data?.message ||"Please try again.";
+      console.log("Backend message:", errorMessage);
+      setErrorModal({open: true, message: errorMessage}); 
     }
   };
 
@@ -87,47 +92,54 @@ const SignUp = () => {
           <h1 className="text-2xl font-bold text-white">
             Create Your{" "}
             <span className="font-extrabold bg-gradient-to-r from-indigo-400 via-purple-400 to-cyan-400 bg-clip-text text-transparent">
-              MindTaskY
+              PrionTask
             </span>{" "}
             Account
           </h1>
           <p className="text-gray-400 text-sm mt-1">Step {step} of 2</p>
         </div>
 
-        {/* Error / Success Messages */}
-        {error && <p className="text-red-400 text-sm mb-3 text-center">{error}</p>}
-        {success && <p className="text-green-400 text-sm mb-3 text-center">{success}</p>}
-        <SuccessModal isOpen={SuccessModalOpen} onClose={() => setSuccessModalOpen(false)} />
+        <ErrorModal
+        isOpen={ShowErrorModal.open}
+        onClose={() => setErrorModal({ open: false, message: "" })}
+        message={ShowErrorModal.message}
+      />
+        <SuccessModal
+          isOpen={SuccessModalOpen}
+          onClose={() => setSuccessModalOpen(false)}
+        />
 
         <div className="flex justify-center mb-6">
-            <div className="flex items-center space-x-4">
-                <div
-                className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-semibold ${
-                    step >= 1
-                    ? "bg-indigo-500 text-white"
-                    : "bg-indigo-950 text-gray-500 border border-gray-700"
-                }`}
-                >
-                1
-                </div>
-                <div className="w-12 h-[2px] bg-gradient-to-r from-indigo-400 via-purple-400 to-cyan-400"></div>
-                <div
-                className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-semibold ${
-                    step === 2
-                    ? "bg-indigo-500 text-white"
-                    : "bg-indigo-950 text-gray-500 border border-gray-700"
-                }`}
-                >
-                2
-                </div>
+          <div className="flex items-center space-x-4">
+            <div
+              className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-semibold ${
+                step >= 1
+                  ? "bg-indigo-500 text-white"
+                  : "bg-indigo-950 text-gray-500 border border-gray-700"
+              }`}
+            >
+              1
             </div>
+            <div className="w-12 h-[2px] bg-gradient-to-r from-indigo-400 via-purple-400 to-cyan-400"></div>
+            <div
+              className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-semibold ${
+                step === 2
+                  ? "bg-indigo-500 text-white"
+                  : "bg-indigo-950 text-gray-500 border border-gray-700"
+              }`}
+            >
+              2
             </div>
+          </div>
+        </div>
 
         {/* Step 1 – Basic Info */}
         {step === 1 && (
           <form onSubmit={nextStep} className="space-y-4">
             <div>
-              <label className="block text-sm text-gray-300 mb-2">First Name</label>
+              <label className="block text-sm text-gray-300 mb-2">
+                First Name
+              </label>
               <input
                 type="text"
                 value={firstName}
@@ -139,7 +151,9 @@ const SignUp = () => {
             </div>
 
             <div>
-              <label className="block text-sm text-gray-300 mb-2">Last Name</label>
+              <label className="block text-sm text-gray-300 mb-2">
+                Last Name
+              </label>
               <input
                 type="text"
                 value={lastName}
@@ -151,7 +165,9 @@ const SignUp = () => {
             </div>
 
             <div>
-              <label className="block text-sm text-gray-300 mb-2">Profile Picture</label>
+              <label className="block text-sm text-gray-300 mb-2">
+                Profile Picture
+              </label>
               <input
                 type="file"
                 accept="image/*"
@@ -190,7 +206,9 @@ const SignUp = () => {
             </div>
 
             <div>
-              <label className="block text-sm text-gray-300 mb-2">Password</label>
+              <label className="block text-sm text-gray-300 mb-2">
+                Password
+              </label>
               <input
                 type="password"
                 value={password}
@@ -202,7 +220,9 @@ const SignUp = () => {
             </div>
 
             <div>
-              <label className="block text-sm text-gray-300 mb-2">Confirm Password</label>
+              <label className="block text-sm text-gray-300 mb-2">
+                Confirm Password
+              </label>
               <input
                 type="password"
                 value={confirmPassword}

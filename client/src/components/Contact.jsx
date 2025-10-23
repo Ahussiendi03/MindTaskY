@@ -23,7 +23,7 @@ const Contact = () => {
         <p className="text-gray-400 max-w-2xl mx-auto mb-12">
           Have a question, feedback, or just want to say hi?  
           We’d love to hear from you — your thoughts help shape the future of{" "}
-          <span className="text-indigo-400 font-semibold">MindTasky</span>.
+          <span className="text-indigo-400 font-semibold">PrionTask</span>.
         </p>
 
         {/* Contact Form */}
