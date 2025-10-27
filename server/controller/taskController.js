@@ -86,3 +86,20 @@ exports.deleteTask = async (req, res) => {
     res.status(500).json({ message: "Server error", error: error.message });
   }
 };
+
+exports.getUserTask = async (req, res) => { 
+  try {
+    const userId = req.user?.id;
+
+    if (!userId) {
+      return res.status(403).json({ message: "Unauthorized: No user found" });
+    }
+
+    const tasks = await Task.find({ userId }).sort({ createdAt: -1 });
+
+    res.status(200).json(tasks);
+  } catch (error) {
+    console.error("Error fetching tasks:", error);
+    res.status(500).json({ message: "Server error", error: error.message });
+  }
+};

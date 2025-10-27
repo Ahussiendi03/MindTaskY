@@ -5,6 +5,7 @@ const {
   getTasks,
   markTaskCompleted,
   deleteTask,
+  getUserTask,
 } = require("../controller/taskController");
 const authMiddleware = require("../middleware/AuthMiddleware");
 
@@ -17,5 +18,7 @@ router.get("/get-tasks", authMiddleware, getTasks);
 router.patch("/:id/complete", authMiddleware, markTaskCompleted);
 
 router.delete("/:id/delete", authMiddleware, deleteTask);
+
+router.get("/user-tasks", authMiddleware, getUserTask);
 
 module.exports = router;

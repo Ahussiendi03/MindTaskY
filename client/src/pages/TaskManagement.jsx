@@ -123,61 +123,57 @@ const TaskManagement = () => {
         </div>
 
         <div className="space-y-3">
-          {tasks.length === 0 ? (
-            <p className="text-gray-400">No tasks yet. Add your first one!</p>
+          {tasks.filter((task) => !task.completed).length === 0 ? (
+            <p className="text-gray-400">No pending tasks. Great job!</p>
           ) : (
-            tasks.map((task) => (
-              <div
-                key={task._id}
-                className={`bg-slate-900 p-4 rounded-lg border-2 border-indigo-600/60 
-                shadow-[0_2px_20px_rgba(99,102,241,0.1)] transition-all duration-300 hover:scale-105 ${
-                  task.completed ? "opacity-70 line-through" : ""
-                }`}
-              >
-                <div className="flex justify-between items-start">
-                  <div>
-                    <div className="flex space-x-28 mb-2 ">
-                      <h3 className="font-semibold text-lg">{task.title}</h3>
-                      <span
-                        className={`text-xs px-2 py-1 rounded-md border ${
-                          priorityColors[task.priority]
-                        }`}
-                      >
-                        {task.priority} Priority
-                      </span>
-                      <p className="text-xs text-gray-400 mt-1">
-                        Created: {task.createdAt}
+            tasks
+              .filter((task) => !task.completed) // ✅ Only show tasks that are NOT completed
+              .map((task) => (
+                <div
+                  key={task._id}
+                  className={`bg-slate-900 p-4 rounded-lg border-2 border-indigo-600/60 
+          shadow-[0_2px_20px_rgba(99,102,241,0.1)] transition-all duration-300 hover:scale-105`}
+                >
+                  <div className="flex justify-between items-start">
+                    <div>
+                      <div className="flex space-x-28 mb-2">
+                        <h3 className="font-semibold text-lg">{task.title}</h3>
+                        <span
+                          className={`text-xs px-2 py-1 rounded-md border ${
+                            priorityColors[task.priority]
+                          }`}
+                        >
+                          {task.priority} Priority
+                        </span>
+                        <p className="text-xs text-gray-400 mt-1">
+                          Created:{" "}
+                          {new Date(task.createdAt).toLocaleDateString()}
+                        </p>
+                      </div>
+
+                      <p className="text-gray-400 text-sm mb-2">
+                        {task.description}
                       </p>
                     </div>
 
-                    <p className="text-gray-400 text-sm mb-2">
-                      {task.description}
-                    </p>
-                  </div>
+                    <div className="flex gap-2">
+                      <button
+                        onClick={() => handleComplete(task._id)}
+                        className="bg-green-600 hover:bg-green-700 px-3 py-1 rounded-md text-sm transition-all duration-300"
+                      >
+                        Done
+                      </button>
 
-                  <div className="flex gap-2">
-                    <button
-                      onClick={() => handleComplete(task._id)}
-                      className={`px-3 py-1 rounded-md text-sm transition-all duration-300 ${
-                        task.completed
-                          ? "bg-gray-600 cursor-not-allowed opacity-60"
-                          : "bg-green-600 hover:bg-green-700"
-                      }`}
-                      disabled={task.completed}
-                    >
-                      {task.completed ? "Completed" : "Done"}
-                    </button>
-
-                    <button
-                      onClick={() => handleDelete(task._id)}
-                      className="bg-red-600 hover:bg-red-700 px-3 py-1 rounded-md text-sm"
-                    >
-                      Delete
-                    </button>
+                      <button
+                        onClick={() => handleDelete(task._id)}
+                        className="bg-red-600 hover:bg-red-700 px-3 py-1 rounded-md text-sm"
+                      >
+                        Delete
+                      </button>
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))
+              ))
           )}
         </div>
 
